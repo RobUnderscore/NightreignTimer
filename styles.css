@@ -1,0 +1,425 @@
+:root {
+    --primary-color: #6b46ff;
+    --danger-color: #ff4646;
+    --bg-color: #0a0a0a;
+    --surface-color: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #999999;
+    --warning-color: #ffaa00;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #3d2645 0%, #5c3a57 50%, #2c3e50 100%);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+body.phase-0 {
+    /* Morning - muted dawn */
+    background: linear-gradient(135deg, #3d2645 0%, #5c3a57 50%, #2c3e50 100%);
+}
+
+body.phase-1 {
+    /* Mid-day - muted blue */
+    background: linear-gradient(135deg, #34495e 0%, #2c3e50 50%, #1a252f 100%);
+}
+
+body.phase-2 {
+    /* Afternoon - muted golden */
+    background: linear-gradient(135deg, #5d4037 0%, #4e342e 50%, #3e2723 100%);
+}
+
+body.phase-3 {
+    /* Evening - deep twilight */
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f1e 100%);
+}
+
+body.phase-4 {
+    /* Night - dark purple with stars effect */
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+}
+
+.particle-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    animation: float 10s infinite ease-in-out;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(110vh) translateX(0);
+        opacity: 0;
+    }
+    10% {
+        transform: translateY(90vh) translateX(10px);
+        opacity: 1;
+    }
+    90% {
+        transform: translateY(10vh) translateX(30px);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-10vh) translateX(50px);
+        opacity: 0;
+    }
+}
+
+.container {
+    width: 100%;
+    max-width: 600px;
+    background-color: var(--surface-color);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    position: relative;
+    z-index: 2;
+    backdrop-filter: blur(10px);
+    background-color: rgba(26, 26, 26, 0.9);
+}
+
+.title {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    background: linear-gradient(135deg, var(--primary-color), #ff46a0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.timer-display {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin: 0 auto 40px;
+}
+
+.circle-container {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+    overflow: visible;
+}
+
+.circle-bg {
+    fill: none;
+    stroke: #2a2a2a;
+    stroke-width: 8;
+}
+
+.circle-progress {
+    fill: none;
+    stroke: var(--primary-color);
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 565.48;
+    stroke-dashoffset: 565.48;
+    transition: stroke-dashoffset 0.5s ease, stroke 0.3s ease;
+    filter: drop-shadow(0 0 10px currentColor);
+}
+
+@keyframes pulse-glow {
+    0%, 100% { filter: drop-shadow(0 0 10px currentColor); }
+    50% { filter: drop-shadow(0 0 20px currentColor) drop-shadow(0 0 30px currentColor); }
+}
+
+.circle-progress.pulsing {
+    animation: pulse-glow 2s infinite;
+}
+
+.circle-progress.warning {
+    stroke: var(--warning-color);
+}
+
+.circle-progress.danger {
+    stroke: var(--danger-color);
+}
+
+.timer-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 80%;
+}
+
+.phase-name {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+}
+
+.time-remaining {
+    font-size: 3rem;
+    font-weight: bold;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    margin-bottom: 10px;
+}
+
+.next-event {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.controls {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+.btn {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background-color: #5a37e6;
+    transform: translateY(-2px);
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+    background-color: #e63737;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: #444;
+    color: white;
+}
+
+.timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.timeline-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+.timeline-item.active {
+    opacity: 1;
+}
+
+.timeline-item.completed {
+    opacity: 0.7;
+}
+
+.timeline-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #444;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.timeline-item.active .timeline-dot {
+    background-color: var(--primary-color);
+    box-shadow: 0 0 10px var(--primary-color);
+}
+
+.timeline-item.active .timeline-dot::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    background-color: white;
+    border-radius: 50%;
+}
+
+.timeline-content {
+    flex: 1;
+}
+
+.timeline-time {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.timeline-phase {
+    font-weight: 600;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: var(--surface-color);
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+.modal-content h2 {
+    margin-bottom: 15px;
+}
+
+.modal-content p {
+    color: var(--text-secondary);
+    margin-bottom: 25px;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+    20%, 40%, 60%, 80% { transform: translateX(2px); }
+}
+
+.container.shake {
+    animation: shake 0.5s;
+}
+
+@keyframes ember {
+    0% {
+        transform: translateY(100vh) scale(0);
+        opacity: 1;
+    }
+    10% {
+        transform: translateY(80vh) scale(1);
+    }
+    100% {
+        transform: translateY(-20vh) translateX(100px) scale(0.5);
+        opacity: 0;
+    }
+}
+
+.particle.ember {
+    background: #ff6b35;
+    box-shadow: 0 0 6px #ff6b35;
+    animation: ember 4s infinite ease-out;
+}
+
+.particle.firefly {
+    background: rgba(255, 255, 153, 0.8);
+    box-shadow: 0 0 4px rgba(255, 255, 153, 0.6);
+    width: 3px;
+    height: 3px;
+    animation: float 15s infinite ease-in-out;
+}
+
+.particle.ash {
+    background: #666;
+    animation: float 8s infinite linear;
+}
+
+.particle.star {
+    background: white;
+    width: 2px;
+    height: 2px;
+    box-shadow: 0 0 3px white;
+    animation: twinkle 3s infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.2); }
+}
+
+@media (max-width: 640px) {
+    .container {
+        padding: 20px;
+    }
+    
+    .title {
+        font-size: 1.5rem;
+    }
+    
+    .timer-display {
+        width: 250px;
+        height: 250px;
+    }
+    
+    .time-remaining {
+        font-size: 2.5rem;
+    }
+    
+    .controls {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .btn {
+        width: 100%;
+    }
+}
