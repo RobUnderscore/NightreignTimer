@@ -3,80 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nightreign Timer</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Nightreign Timer v2</title>
+    <link rel="stylesheet" href="v2.css">
 </head>
 <body>
     <div class="container">
-        <h1 class="title">Nightreign Timer</h1>
+        <h1 class="title">Nightreign Timer v2</h1>
         
-        <div class="timer-display">
-            <svg class="circle-container" viewBox="-10 -10 220 220">
-                <circle class="circle-bg" cx="100" cy="100" r="90"></circle>
-                <circle class="circle-progress" cx="100" cy="100" r="90"></circle>
-            </svg>
-            <div class="timer-text">
-                <div class="phase-name">Beginning of Day</div>
-                <div class="time-remaining">0:00</div>
-                <div class="next-event">Next: Circle starts closing in 4:30</div>
+        <div class="days-container">
+            <div class="day-section">
+                <div class="phases-list">
+                    <div class="phase-button" data-phase="0">
+                        <div class="phase-info">
+                            <span class="phase-name">Beginning of Day</span>
+                            <span class="phase-time"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-button" data-phase="1">
+                        <div class="phase-info">
+                            <span class="phase-name">First Circle Closing</span>
+                            <span class="phase-time"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-button" data-phase="2">
+                        <div class="phase-info">
+                            <span class="phase-name">Inner Circle</span>
+                            <span class="phase-time"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-button" data-phase="3">
+                        <div class="phase-info">
+                            <span class="phase-name">Second Circle Closing</span>
+                            <span class="phase-time"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-button boss" data-phase="4">
+                        <div class="phase-info">
+                            <span class="phase-name">Boss Fight!</span>
+                            <span class="phase-time"></span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         
         <div class="controls">
-            <button class="btn btn-primary" id="startBtn">Start Timer</button>
-            <button class="btn btn-danger" id="resetBtn" disabled>Reset</button>
+            <button class="btn btn-danger" id="resetBtn">Reset All</button>
         </div>
         
-        <div class="timeline">
-            <div class="timeline-item" data-phase="0">
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                    <div class="timeline-time">0:00</div>
-                    <div class="timeline-phase">Beginning of Day</div>
-                </div>
-            </div>
-            <div class="timeline-item" data-phase="1">
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                    <div class="timeline-time">4:30</div>
-                    <div class="timeline-phase">First Circle Closing</div>
-                </div>
-            </div>
-            <div class="timeline-item" data-phase="2">
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                    <div class="timeline-time">7:30</div>
-                    <div class="timeline-phase">Inner Circle</div>
-                </div>
-            </div>
-            <div class="timeline-item" data-phase="3">
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                    <div class="timeline-time">11:00</div>
-                    <div class="timeline-phase">Inner Circle Closing</div>
-                </div>
-            </div>
-            <div class="timeline-item" data-phase="4">
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                    <div class="timeline-time">14:00</div>
-                    <div class="timeline-phase">Boss Fight!</div>
-                </div>
+        <div class="current-status">
+            <h3><span id="currentPhaseDisplay">Ready to Start</span></h3>
+            <div class="time-display">
+                <span id="timeRemaining">14:00</span>
             </div>
         </div>
     </div>
     
-    <div class="modal" id="resetModal">
-        <div class="modal-content">
-            <h2>Reset Timer?</h2>
-            <p>Are you sure you want to reset the timer?</p>
-            <div class="modal-buttons">
-                <button class="btn btn-secondary" id="cancelReset">Cancel</button>
-                <button class="btn btn-danger" id="confirmReset">Reset</button>
-            </div>
-        </div>
-    </div>
-    
-    <script src="app.js"></script>
+    <script src="ember-particles.js"></script>
+    <script src="rune-glyphs.js"></script>
+    <script src="v2.js"></script>
 </body>
 </html>

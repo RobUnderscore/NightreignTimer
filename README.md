@@ -2,6 +2,11 @@
 
 A visual countdown timer for tracking circle phases in Nightreign gameplay. Features dynamic backgrounds, particle effects, and audio warnings.
 
+## Versions
+
+- **index.html** - Original circular timer with vertical phase timeline
+- **v2.html** - Compact version with all phases for two days as clickable horizontal buttons
+
 ## Features
 
 - **Multi-phase timer** tracking all game phases
