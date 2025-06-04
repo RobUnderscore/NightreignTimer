@@ -12,6 +12,8 @@ class NightreignTimerV2 {
         this.audioContext = null;
         this.warningPlayed = new Set();
         this.wakeLock = null;
+        this.globalStartTime = null;
+        this.elapsedBeforeCurrentPhase = 0;
         
         // Initialize visual effects
         this.emberParticles = new EmberParticles();
@@ -124,6 +126,19 @@ class NightreignTimerV2 {
         const phase = parseInt(button.dataset.phase);
         const duration = parseInt(button.dataset.duration);
         
+        // Set global start time on first phase
+        if (!this.globalStartTime && phase === 0) {
+            this.globalStartTime = performance.now();
+            this.elapsedBeforeCurrentPhase = 0;
+        } else if (this.globalStartTime) {
+            // Calculate elapsed time up to this phase
+            let elapsed = 0;
+            for (let i = 0; i < phase; i++) {
+                elapsed += this.phases[i].duration;
+            }
+            this.elapsedBeforeCurrentPhase = elapsed;
+        }
+        
         // Mark previous phases as completed
         this.phaseButtons.forEach(btn => {
             const btnPhase = parseInt(btn.dataset.phase);
@@ -178,13 +193,28 @@ class NightreignTimerV2 {
         const phaseTimeElement = button.querySelector('.phase-time');
         const originalTime = phaseTimeElement.textContent;
         
+        // Use high-precision timing
+        const phaseStartTime = performance.now();
+        const phaseDurationMs = duration * 1000;
+        
         this.activeTimer = {
             button: button,
             phase: phase,
             originalTime: originalTime,
+            startTime: phaseStartTime,
             interval: setInterval(() => {
-                timeRemaining--;
-                totalTimeRemaining--;
+                // Calculate elapsed time with precision
+                const now = performance.now();
+                const phaseElapsed = now - phaseStartTime;
+                const phaseElapsedSeconds = Math.floor(phaseElapsed / 1000);
+                
+                // Calculate total elapsed time from global start
+                const totalElapsed = this.globalStartTime ? (now - this.globalStartTime) / 1000 : 0;
+                const totalExpectedDuration = this.getTotalRemainingTime(0); // 840 seconds
+                
+                // Update time remaining based on actual elapsed time
+                timeRemaining = Math.max(0, duration - phaseElapsedSeconds);
+                totalTimeRemaining = Math.max(0, Math.floor(totalExpectedDuration - totalElapsed));
                 
                 // Update time display on button
                 phaseTimeElement.textContent = this.formatTime(timeRemaining);
@@ -192,14 +222,14 @@ class NightreignTimerV2 {
                 // Update total time display at bottom
                 this.timeRemainingDisplay.textContent = this.formatTime(totalTimeRemaining);
                 
-                // Update full bar progress
-                const progress = ((duration - timeRemaining) / duration) * 100;
+                // Update full bar progress based on actual elapsed time
+                const progress = Math.min(100, (phaseElapsed / phaseDurationMs) * 100);
                 button.style.setProperty('--progress', progress + '%');
                 
                 // Check warnings
                 this.checkWarnings(phase, timeRemaining, button);
                 
-                if (timeRemaining <= 0) {
+                if (phaseElapsed >= phaseDurationMs) {
                     clearInterval(this.activeTimer.interval);
                     button.classList.remove('active');
                     button.classList.add('completed');
@@ -210,10 +240,11 @@ class NightreignTimerV2 {
                     const nextButton = this.getNextPhaseButton(phase);
                     if (nextButton) {
                         this.playSound('phase-change');
-                        setTimeout(() => this.startPhase(nextButton), 1000);
+                        // Start next phase immediately to maintain accurate timing
+                        this.startPhase(nextButton);
                     }
                 }
-            }, 1000)
+            }, 100) // Update more frequently for smoother display
         };
         
         // Update initial display
@@ -297,6 +328,8 @@ class NightreignTimerV2 {
         
         this.activeTimer = null;
         this.warningPlayed.clear();
+        this.globalStartTime = null;
+        this.elapsedBeforeCurrentPhase = 0;
         
         // Release wake lock when resetting
         this.releaseWakeLock();
